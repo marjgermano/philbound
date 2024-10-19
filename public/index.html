@@ -183,16 +183,15 @@
             })
               .then((data) => {
                 // Handle success
-                alert("Registration successful!");
                 console.log(data); // Handle the success response
 
+                window.location.href = "success.html";
                 // Clear form fields
                 event.target.reset();
               })
               .catch((error) => {
                 // Handle error
                 alert("Registration failed: " + error.message);
-                console.error("Error:", error);
               });
           } else {
             alert("Please fill out both the full name and email fields.");
