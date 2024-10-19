@@ -37,7 +37,7 @@
     </script>
   </head>
   <body
-    class="bg-primary cursor-default font-roboto text-white flex overflow-x-hidden"
+    class="bg-primary cursor-default font-roboto text-white flex flex-col overflow-x-hidden"
   >
     <main>
       <!-- Intro Section -->
@@ -63,17 +63,20 @@
               </p>
             </div>
 
-            <div
+            <form
+              id="registerForm"
               class="flex flex-col items-center justify-center w-3/4 lg:w-1/2"
             >
               <input
                 type="text"
                 placeholder="Full Name"
+                name="fullname"
                 aria-label="Enter your full name"
                 class="mb-4 p-2 border text-black border-gray-300 rounded-lg w-full"
               />
               <input
                 type="email"
+                name="email"
                 placeholder="E-mail"
                 aria-label="Enter your email"
                 class="mb-4 p-2 border text-black border-gray-300 rounded-lg w-full"
@@ -84,7 +87,7 @@
               >
                 Register now
               </button>
-            </div>
+            </form>
           </div>
         </div>
 
@@ -155,5 +158,46 @@
       <p><i class="fa-solid text-blue-600 fa-copyright"></i> Freepik</p>
       <p>Philbound 2024</p>
     </footer>
+    <script>
+      document
+        .getElementById("registerForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent form from reloading the page
+
+          // Create FormData object to collect the form data automatically
+          const formData = new FormData(event.target);
+
+          // Convert FormData to an object
+          const formObject = Object.fromEntries(formData.entries());
+
+          // Validate form data
+          if (formObject.fullname && formObject.email) {
+            // Send the POST request
+            fetch("https://philbound.com/api/send-email", {
+              method: "POST",
+              mode: "no-cors",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(formObject),
+            })
+              .then((data) => {
+                // Handle success
+                alert("Registration successful!");
+                console.log(data); // Handle the success response
+
+                // Clear form fields
+                event.target.reset();
+              })
+              .catch((error) => {
+                // Handle error
+                alert("Registration failed: " + error.message);
+                console.error("Error:", error);
+              });
+          } else {
+            alert("Please fill out both the full name and email fields.");
+          }
+        });
+    </script>
   </body>
 </html>
